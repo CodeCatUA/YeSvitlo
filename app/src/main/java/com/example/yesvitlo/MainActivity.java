@@ -48,12 +48,13 @@ public class MainActivity extends AppCompatActivity {
                 if (!posts.isEmpty()){
                     Element lastPost = posts.last();
                     Element textElement = lastPost.selectFirst(".tgme_widget_message_text");
+                    Element timeElement = lastPost.selectFirst(".tgme_widget_message_date time");
+                    String dateTime = "Дата невідома";
                     if (textElement != null){
                         result = textElement.text();
                     } else {
                         result = "Останій пост не мість тексту";
                     }
-
                 }
                 String finalResult = result;
                 runOnUiThread(()-> tvResult.setText(finalResult));
