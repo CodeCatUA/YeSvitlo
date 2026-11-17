@@ -49,9 +49,12 @@ public class MainActivity extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerGroups.setAdapter(adapter);
 
-        String selectedGroup = spinnerGroups.getSelectedItem().toString();
 
-        btnCheck.setOnClickListener(v -> checkTelegram(selectedGroup));
+
+        btnCheck.setOnClickListener(v -> {
+            String selectedGroup = spinnerGroups.getSelectedItem().toString();
+            checkTelegram(selectedGroup);
+        });
 
 
     }
@@ -67,19 +70,19 @@ public class MainActivity extends AppCompatActivity {
 
                 if (!posts.isEmpty()){
                     for (int i = posts.size()-1; i>=0; i--){
-                        Element lastPost = posts.last();
+                        Element lastPost = posts.get(i);
                         Element textElement = lastPost.selectFirst(".tgme_widget_message_text");
                         if (textElement == null){
                             continue;
                         }
                         String postText = textElement.text();
                         if (postText.contains(group)){
-                            Element timeElement = lastPost.selectFirst(".tgme_widget_message_date time");
-                            if (textElement != null){
+                             if (textElement != null){
                                 result = textElement.text();
                             } else {
                                 result = "Останій пост не мість тексту";
                             }
+                            Element timeElement = lastPost.selectFirst(".tgme_widget_message_date time");
                             if (timeElement != null){
                                 dateTime = timeElement.attr("datetime");
                                 SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX", Locale.US);
@@ -89,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
                             } else {
                                 dateTime = "Не вдалось отримати дату поста";
                             }
+                            break;
                         }
                     }
 
@@ -99,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
                 runOnUiThread(()-> tvResult.setText(finalResult));
                 runOnUiThread(()-> tvDate.setText(finalDate));
             } catch (Exception e){
-                runOnUiThread(() -> tvResult.setText("Помилка завантаження телеграм"));
+                runOnUiThread(() -> tvResult.setText("Помилка завантаження телеграму"));
             }
         }).start();
     }
